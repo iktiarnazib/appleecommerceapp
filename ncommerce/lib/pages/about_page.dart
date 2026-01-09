@@ -15,6 +15,7 @@ class AboutPage extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            Image.asset('assets/images/applelogo.png', height: 20),
             Text(
               'This is official Apple Purchasing Page',
               style: TextStyle(fontWeight: FontWeight.w500),
@@ -22,7 +23,7 @@ class AboutPage extends StatelessWidget {
             ),
 
             Text(
-              'Copyrigth 2004 - 2026',
+              'Copyright 2004 - 2026',
               style: TextStyle(fontSize: 10),
               textAlign: TextAlign.center,
             ),

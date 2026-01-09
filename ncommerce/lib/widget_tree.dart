@@ -70,7 +70,7 @@ class _WidgetTreeState extends State<WidgetTree> {
               Image.asset(
                 'assets/images/applelogo.png',
                 color: Colors.white,
-                height: 150,
+                height: 100,
               ),
 
               //menu items
@@ -79,9 +79,12 @@ class _WidgetTreeState extends State<WidgetTree> {
                 child: ListTile(
                   leading: Icon(Icons.home, color: Colors.white),
                   title: Text('Home', style: TextStyle(color: Colors.white)),
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.pop(context);
+                  },
                 ),
               ),
+
               Padding(
                 padding: const EdgeInsets.only(left: 20.0),
                 child: ListTile(
@@ -93,8 +96,9 @@ class _WidgetTreeState extends State<WidgetTree> {
                   },
                 ),
               ),
+              Expanded(child: SizedBox()),
               Padding(
-                padding: const EdgeInsets.only(left: 20.0),
+                padding: const EdgeInsets.only(left: 20.0, bottom: 20.0),
                 child: ListTile(
                   leading: Icon(Icons.logout, color: Colors.white),
                   title: Text('Log out', style: TextStyle(color: Colors.white)),
