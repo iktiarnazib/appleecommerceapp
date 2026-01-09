@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:ncommerce/pages/home_page.dart';
+import 'package:ncommerce/pages/about_page.dart';
+import 'package:ncommerce/widget_tree.dart';
 import 'package:ncommerce/pages/intro_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -23,7 +24,18 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: shown ? HomePage() : IntroPage(),
+      routes: {
+        'home': (context) {
+          return const WidgetTree();
+        },
+        'aboutpage': (context) {
+          return const AboutPage();
+        },
+        'intropage': (context) {
+          return const IntroPage();
+        },
+      },
+      home: shown ? WidgetTree() : IntroPage(),
     );
   }
 }

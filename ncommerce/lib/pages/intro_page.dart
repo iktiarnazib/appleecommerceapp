@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:ncommerce/pages/home_page.dart';
+import 'package:ncommerce/widget_tree.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class IntroPage extends StatefulWidget {
@@ -19,7 +19,7 @@ class _IntroPageState extends State<IntroPage> {
         context,
         MaterialPageRoute(
           builder: (context) {
-            return HomePage();
+            return WidgetTree();
           },
         ),
       );
