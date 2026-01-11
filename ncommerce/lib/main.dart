@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ncommerce/pages/about_page.dart';
 import 'package:ncommerce/widget_tree.dart';
 import 'package:ncommerce/pages/intro_page.dart';
@@ -13,7 +14,7 @@ void main() async {
   //store
   final bool shown = prefs.getBool('shown') ?? false;
 
-  runApp(MyApp(shown: shown));
+  runApp(ProviderScope(child: MyApp(shown: shown)));
 }
 
 class MyApp extends StatelessWidget {

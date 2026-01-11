@@ -1,50 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:ncommerce/components/product_tile.dart';
 import 'package:ncommerce/models/product.dart';
+import 'package:ncommerce/providers/product_provider.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class ShopPage extends StatefulWidget {
+class ShopPage extends ConsumerStatefulWidget {
   const ShopPage({super.key});
 
   @override
-  State<ShopPage> createState() => _ShopPageState();
+  ConsumerState<ShopPage> createState() => _ShopPageState();
 }
 
-class _ShopPageState extends State<ShopPage> {
-  List<List<dynamic>> productList = [
-    [
-      'M1 Pro',
-      1200,
-      'assets/images/m1pro.png',
-      'Worlds most powerful Laptop now within your reach, Offer price for Today',
-    ],
-    [
-      'M2 Pro',
-      1500,
-      'assets/images/m2pro.png',
-      'Latest MacBook Pro M2, capable of changing your worldview on Laptops entirely!',
-    ],
-    [
-      'M4 Pro',
-      2200,
-      'assets/images/M4pro.png',
-      'The most portable powerful laptop, 30% FASTER performance from the last Gen.',
-    ],
-    [
-      'M5 Pro',
-      2999,
-      'assets/images/m5pro.png',
-      'Revolutionize your workflow by using the latest M5 Pro Macbook Pro',
-    ],
-    [
-      'IPhone 17 Pro Max',
-      999,
-      'assets/images/17promax.png',
-      'The Latest IPhone 17 Pro Max with 40% Performance increase from the previous generation, Buy Today!',
-    ],
-  ];
-
+class _ShopPageState extends ConsumerState<ShopPage> {
   @override
   Widget build(BuildContext context) {
+    final allProducts = ref.watch(productProvider);
+
     return Column(
       children: [
         //searchbar
@@ -99,14 +70,14 @@ class _ShopPageState extends State<ShopPage> {
         Expanded(
           child: ListView.builder(
             scrollDirection: Axis.horizontal,
-            itemCount: productList.length,
+            itemCount: allProducts.length,
             itemBuilder: (context, index) {
               return ProductTile(
                 product: Product(
-                  name: productList[index][0],
-                  price: productList[index][1],
-                  image: productList[index][2],
-                  description: productList[index][3],
+                  name: allProducts[index].name,
+                  price: allProducts[index].price,
+                  image: allProducts[index].image,
+                  description: allProducts[index].description,
                 ),
               );
             },
