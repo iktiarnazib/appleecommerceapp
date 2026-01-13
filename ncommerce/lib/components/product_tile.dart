@@ -1,15 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ncommerce/models/product.dart';
+import 'package:ncommerce/providers/cart_provider.dart';
 
-class ProductTile extends StatelessWidget {
+class ProductTile extends ConsumerStatefulWidget {
   final Product product;
   const ProductTile({super.key, required this.product});
 
   @override
+  ConsumerState<ProductTile> createState() => _ProductTileState();
+}
+
+class _ProductTileState extends ConsumerState<ProductTile> {
+  @override
   Widget build(BuildContext context) {
+    final cartProduct = ref.watch(cartProvider);
+
     return Container(
       margin: EdgeInsets.only(left: 15, right: 5),
-      width: 300,
+      width: 320,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(8),
         color: Colors.grey[400],
@@ -19,20 +28,22 @@ class ProductTile extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Column(
-              children: [
-                //image
-                Image.asset(product.image),
-                //description
-                Padding(
-                  padding: const EdgeInsets.all(20.0),
-                  child: Text(
-                    product.description,
-                    textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: 15),
-                  ),
+            Expanded(
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    Image.asset(widget.product.image),
+                    Padding(
+                      padding: const EdgeInsets.all(20.0),
+                      child: Text(
+                        widget.product.description,
+                        textAlign: TextAlign.center,
+                        style: TextStyle(fontSize: 15),
+                      ),
+                    ),
+                  ],
                 ),
-              ],
+              ),
             ),
 
             //name + price
@@ -46,34 +57,113 @@ class ProductTile extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       //shoe name
-                      Text(
-                        product.name,
-                        style: TextStyle(
-                          fontWeight: FontWeight.w600,
-                          fontSize: 22,
+                      FittedBox(
+                        child: Text(
+                          widget.product.name,
+                          style: TextStyle(
+                            fontWeight: FontWeight.w600,
+                            fontSize: 22,
+                          ),
                         ),
                       ),
                       //shoe price
                       Text(
-                        "\$${product.price}",
+                        "\$${widget.product.price}",
                         style: TextStyle(color: Colors.grey[700]),
                       ),
                     ],
                   ),
                 ),
                 //plus button
-                Container(
-                  padding: EdgeInsets.all(10),
-                  decoration: BoxDecoration(
-                    color: Colors.black,
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(10),
-                      bottomRight: Radius.circular(10),
+                Flexible(
+                  child: Container(
+                    padding: EdgeInsets.all(10),
+                    decoration: BoxDecoration(
+                      color: Colors.black,
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(10),
+                        bottomRight: Radius.circular(10),
+                      ),
                     ),
-                  ),
-                  child: IconButton(
-                    onPressed: () {},
-                    icon: Icon(Icons.add, color: Colors.white),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        IconButton(
+                          onPressed: () {
+                            if (!cartProduct.contains(widget.product)) {
+                              ref
+                                  .read(cartProvider.notifier)
+                                  .addProduct(widget.product);
+                              showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return AlertDialog.adaptive(
+                                    title: Text('Added Successfully!'),
+                                    content: Text(
+                                      'Your Item has been added to the cart successfully, Please switch the the cart option for checkout!',
+                                    ),
+                                    actions: [
+                                      GestureDetector(
+                                        onTap: () {
+                                          Navigator.pop(context);
+                                        },
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(10.0),
+                                          child: Text(
+                                            'Close',
+                                            textAlign: TextAlign.center,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  );
+                                },
+                              );
+                            }
+                            if (cartProduct.contains(widget.product)) {
+                              ref
+                                  .read(cartProvider.notifier)
+                                  .removeProduct(widget.product);
+                              showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return AlertDialog.adaptive(
+                                    title: Text('Removed Successfully!'),
+                                    content: Text(
+                                      'Your Item has been removed from the cart successfully, add new one and checkout!',
+                                    ),
+                                    actions: [
+                                      GestureDetector(
+                                        onTap: () {
+                                          Navigator.pop(context);
+                                        },
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(10.0),
+                                          child: Text(
+                                            'Close',
+                                            textAlign: TextAlign.center,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  );
+                                },
+                              );
+                            }
+                          },
+                          icon: cartProduct.contains(widget.product)
+                              ? Icon(Icons.delete, color: Colors.red)
+                              : Icon(Icons.add, color: Colors.white),
+                        ),
+                        if (!cartProduct.contains(widget.product))
+                          Text(
+                            'Add to cart',
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        if (cartProduct.contains(widget.product))
+                          Text('Remove', style: TextStyle(color: Colors.white)),
+                      ],
+                    ),
                   ),
                 ),
               ],

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:ncommerce/components/product_tile.dart';
-import 'package:ncommerce/models/product.dart';
 import 'package:ncommerce/providers/product_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -67,19 +66,14 @@ class _ShopPageState extends ConsumerState<ShopPage> {
           ),
         ),
         SizedBox(height: 5),
+
+        //List of Products
         Expanded(
           child: ListView.builder(
             scrollDirection: Axis.horizontal,
             itemCount: allProducts.length,
             itemBuilder: (context, index) {
-              return ProductTile(
-                product: Product(
-                  name: allProducts[index].name,
-                  price: allProducts[index].price,
-                  image: allProducts[index].image,
-                  description: allProducts[index].description,
-                ),
-              );
+              return ProductTile(product: allProducts[index]);
             },
           ),
         ),
